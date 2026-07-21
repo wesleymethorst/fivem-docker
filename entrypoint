@@ -7,7 +7,4 @@ exec /lib/ld-musl-x86_64.so.1 \
     -- \
     /opt/cfx-server/cfx-server \
         +set citizen_dir /opt/cfx-server/citizen/ \
-        +set txAdminPort "${TXADMIN_PORT:-40120}" \
-        +set txAdminInterface "${TXADMIN_INTERFACE:-0.0.0.0}" \
-        +set txDataPath "${TXDATA_PATH:-/txData}" \
         "$@"

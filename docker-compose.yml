@@ -6,9 +6,10 @@ services:
     tty: true
     stdin_open: true
     environment:
-      TXADMIN_PORT: "40120"
-      TXADMIN_INTERFACE: "0.0.0.0"
-      TXDATA_PATH: "/txData"
+      TXHOST_GAME_NAME: "fivem"
+      TXHOST_TXA_PORT: "40120"
+      TXHOST_INTERFACE: "0.0.0.0"
+      TXHOST_DATA_PATH: "/txData"
     volumes:
       - /home/fivem/woenselcombat:/txData
     ports:

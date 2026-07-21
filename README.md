@@ -23,9 +23,10 @@ services:
     tty: true
     stdin_open: true
     environment:
-      TXADMIN_PORT: "40120"
-      TXADMIN_INTERFACE: "0.0.0.0"
-      TXDATA_PATH: "/txData"
+      TXHOST_GAME_NAME: "fivem"
+      TXHOST_TXA_PORT: "40120"
+      TXHOST_INTERFACE: "0.0.0.0"
+      TXHOST_DATA_PATH: "/txData"
     volumes:
       - /home/fivem/woenselcombat:/txData
     ports:
@@ -44,9 +45,10 @@ ports, for example `30121:30120` and `40121:40120`.
 
 | Variable | Default | Description |
 |---|---|---|
-| `TXADMIN_PORT` | `40120` | Internal txAdmin web port |
-| `TXADMIN_INTERFACE` | `0.0.0.0` | Listen on all container interfaces |
-| `TXDATA_PATH` | `/txData` | Persistent txAdmin data directory |
+| `TXHOST_GAME_NAME` | `fivem` | Restricts txAdmin to FiveM recipes |
+| `TXHOST_TXA_PORT` | `40120` | Internal txAdmin web port |
+| `TXHOST_INTERFACE` | `0.0.0.0` | Listen on all container interfaces |
+| `TXHOST_DATA_PATH` | `/txData` | Persistent txAdmin data directory |
 | `DEBUG` | empty | Enables shell tracing when set |
 
 ## Local build
