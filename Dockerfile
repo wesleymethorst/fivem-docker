@@ -12,6 +12,7 @@ WORKDIR /output
 RUN mkdir -p /tmp/cfx-artifact \
  && wget -O- "${CFX_URL}" | tar xJ -C /tmp/cfx-artifact \
  && cp -a /tmp/cfx-artifact/alpine/. /output/ \
+ && chmod 0755 /output/opt/cfx-server/cfx-server \
  && rm -rf /tmp/cfx-artifact \
  && mkdir -p /output/opt/cfx-server-data /output/usr/local/share \
  && wget -O- https://github.com/citizenfx/cfx-server-data/archive/${DATA_VER}.tar.gz \
