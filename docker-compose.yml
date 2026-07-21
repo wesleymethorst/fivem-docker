@@ -1,45 +1,17 @@
 services:
   fivem:
-    build: .
-    image: fivem-enhanced:90
-    container_name: fivem
-    restart: always
-    stdin_open: true
-    tty: true
-    volumes:
-      - "/path/to/resources/folder:/config"
-      # Enable a volume mount for txAdmin's data files
-      # - "/path/to/txData/folder:/txData"
-    ports:
-      - "30120:30120"
-      - "30120:30120/udp"
-      # Allow txAdmin's webserver port to be accessible
-      # - "40120:40120"
-    environment:
-      LICENSE_KEY: "license-key-here"
-
-
-
-
-
-services:
-  fivem:
-    build: .
-    image: ghcr.io/wesleymethorst/fivem-enhanced:sha-c307c40
+    image: ghcr.io/wesleymethorst/fivem-enhanced:enhanced
+    pull_policy: always
     restart: unless-stopped
     tty: true
     stdin_open: true
-
     environment:
-      NO_DEFAULT_CONFIG: "1"
-
+      TXADMIN_PORT: "40120"
+      TXADMIN_INTERFACE: "0.0.0.0"
+      TXDATA_PATH: "/txData"
     volumes:
       - /home/fivem/woenselcombat:/txData
-
     ports:
       - "30120:30120/tcp"
       - "30120:30120/udp"
-      - "40120:40120"
-
-    labels:
-      - "traefik.enable=true"
+      - "40120:40120/tcp"

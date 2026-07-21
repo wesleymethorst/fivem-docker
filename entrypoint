@@ -1,57 +1,13 @@
 #!/bin/sh
 
-if [ -n "$DEBUG" ]; then
-    set -x
-fi
-
-if [ -z "${NO_DEFAULT_CONFIG}" ] && ! find . -mindepth 1 | read -r; then
-    >&2 echo "Creating default configs..."
-    cp -r /opt/cfx-server-data/* /config
-    RCON_PASS="${RCON_PASSWORD-$(tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 16)}"
-    sed -i "s/{RCON_PASS}/${RCON_PASS}/g" /config/server.cfg;
-    >&2 echo "----------------------------------------------"
-    >&2 echo "RCON password is set to: ${RCON_PASS}"
-    >&2 echo "----------------------------------------------"
-fi
-
-if [ -z "$NO_ONESYNC" ]; then
-    ONESYNC_ARGS="+set onesync on +set onesync_population true"
-fi
-
-CONFIG_ARGS=
-if [ -z "${NO_DEFAULT_CONFIG}" ]; then
-    CONFIG_ARGS="$CONFIG_ARGS $ONESYNC_ARGS +exec /config/server.cfg"
-else
-    CONFIG_ARGS="$CONFIG_ARGS +set txAdminPort ${TXADMIN_PORT:-40120}"
-    CONFIG_ARGS="$CONFIG_ARGS +set txAdminInterface ${TXADMIN_INTERFACE:-0.0.0.0}"
-    CONFIG_ARGS="$CONFIG_ARGS +set txDataPath ${TXDATA_PATH:-/txData}"
-fi
-
-# English is hard
-if [ -z "${NO_LICENSE_KEY}${NO_LICENCE_KEY}" ]; then
-    if [ -z "${LICENSE_KEY}" ] && [ -n "${LICENCE_KEY}" ]; then
-        LICENSE_KEY="${LICENCE_KEY}"
-    fi
-
-    if [ -n "${NO_DEFAULT_CONFIG}" ]; then
-        if [ -n "${LICENSE_KEY}" ]; then
-            >&2 printf "txAdmin does not use the \$LICENSE_KEY environment variable.\nPlease remove it and set it through the txAdmin web UI.\n\n"
-            exit 1
-        fi
-    else
-        if [ -z "${LICENSE_KEY}" ]; then
-            >&2 printf "License key not found in environment, please create one at https://keymaster.fivem.net!\n"
-            exit 1
-        fi
-
-        CONFIG_ARGS="$CONFIG_ARGS +set sv_licenseKey ${LICENSE_KEY}"
-    fi
-fi
+[ -n "${DEBUG}" ] && set -x
 
 exec /lib/ld-musl-x86_64.so.1 \
     --library-path "/lib/:/usr/lib/" \
     -- \
     /opt/cfx-server/cfx-server \
         +set citizen_dir /opt/cfx-server/citizen/ \
-        $CONFIG_ARGS \
-        $*
+        +set txAdminPort "${TXADMIN_PORT:-40120}" \
+        +set txAdminInterface "${TXADMIN_INTERFACE:-0.0.0.0}" \
+        +set txDataPath "${TXDATA_PATH:-/txData}" \
+        "$@"
