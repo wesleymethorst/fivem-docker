@@ -14,7 +14,7 @@ RUN wget -O- "${CFX_URL}" \
             --exclude alpine/dev --exclude alpine/proc \
             --exclude alpine/run --exclude alpine/sys \
  && mkdir -p /output/opt/cfx-server-data /output/usr/local/share \
- && wget -O- http://github.com/citizenfx/cfx-server-data/archive/${DATA_VER}.tar.gz \
+ && wget -O- https://github.com/citizenfx/cfx-server-data/archive/${DATA_VER}.tar.gz \
         | tar xz --strip-components=1 -C opt/cfx-server-data
 
 ADD server.cfg opt/cfx-server-data
@@ -24,7 +24,7 @@ RUN chmod +x /output/usr/bin/entrypoint
 
 #================
 
-FROM scratch
+FROM spritsail/alpine:3.23
 
 ARG CFX_NUM
 ARG CFX_URL
