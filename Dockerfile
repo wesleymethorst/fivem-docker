@@ -11,6 +11,8 @@ RUN mkdir -p /tmp/cfx-artifact \
  && wget -O- "${CFX_URL}" | tar xJ -C /tmp/cfx-artifact \
  && cp -a /tmp/cfx-artifact/alpine/. /output/ \
  && chmod 0755 /output/opt/cfx-server/cfx-server \
+ && test -x /output/bin/sh \
+ && test -x /output/opt/cfx-server/cfx-server \
  && rm -rf /tmp/cfx-artifact
 
 COPY entrypoint usr/bin/entrypoint
@@ -19,7 +21,7 @@ RUN chmod +x /output/usr/bin/entrypoint
 
 #================
 
-FROM spritsail/alpine:3.23
+FROM scratch
 
 ARG CFX_NUM
 ARG CFX_URL
@@ -34,10 +36,8 @@ LABEL org.opencontainers.image.authors="Spritsail <fivem@spritsail.io>" \
       io.spritsail.source.cfx=${CFX_URL}
 
 COPY --from=builder /output/ /
-RUN test -x /opt/cfx-server/cfx-server \
- && apk add --no-cache bash tini
 
 WORKDIR /txData
 EXPOSE 30120 40120
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/entrypoint"]
+ENTRYPOINT ["/usr/bin/entrypoint"]
