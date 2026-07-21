@@ -35,7 +35,7 @@ LABEL org.opencontainers.image.authors="Spritsail <fivem@spritsail.io>" \
 
 COPY --from=builder /output/ /
 RUN test -x /opt/cfx-server/cfx-server \
- && apk add --no-cache tini
+ && apk add --no-cache bash tini
 
 WORKDIR /txData
 EXPOSE 30120 40120
