@@ -10,9 +10,42 @@
 [![Docker Stars](https://img.shields.io/docker/stars/spritsail/fivem.svg)][hub]
 [![Build Status](https://drone.spritsail.io/api/badges/spritsail/fivem/status.svg)][drone]
 
-This docker image allows you to run a server for FiveM, a modded GTA multiplayer program.
+This Docker image runs the Linux Cfx Server for **FiveM for GTAV Enhanced**. It uses
+the separate Enhanced server artifact published on the official Cfx.re download page.
 Upon first run, the configuration is generated in the host mount for the `/config` directory.
 The container should be stopped so fivem can be configured to the user requirements in the `server.cfg`.
+
+## Build
+
+Build the local Enhanced image with:
+
+```sh
+docker compose build
+```
+
+The resulting image is named `fivem-enhanced:90`. The artifact URL and build number
+are pinned in the `Dockerfile`, so builds remain reproducible.
+
+## GitHub Container Registry
+
+The GitHub Actions workflow builds the image after every branch push and can also
+be started manually from the Actions tab. Branch builds publish a commit SHA tag;
+the default branch additionally publishes `latest` and build number `90`:
+
+```text
+ghcr.io/<github-user>/fivem-enhanced:latest
+ghcr.io/<github-user>/fivem-enhanced:90
+ghcr.io/<github-user>/fivem-enhanced:sha-<commit>
+```
+
+Pull the published image with:
+
+```sh
+docker pull ghcr.io/<github-user>/fivem-enhanced:latest
+```
+
+The first published package may be private. Its visibility can be changed to public
+under the package settings on GitHub.
 
 ## License Key
 
@@ -31,15 +64,16 @@ docker run -d \
   -p 30120:30120/udp \
   -v /volumes/fivem:/config \
   -ti \
-  spritsail/fivem
+  fivem-enhanced:90
 ```
 
 _It is important that you use `interactive` and `pseudo-tty` options otherwise the container will crash on startup_
 See [issue #3](https://github.com/spritsail/fivem/issues/3)
 
-## Image tags
+## Image tag
 
-This image has two tags - a `latest` tag (the default), based on the most recent FiveM build, and a `stable` tag, based on the "optional" FiveM release. We do not provide an image based on the recommended FiveM release as it is typically too stale.
+The local image is tagged with its Cfx Server build number. Update `CFX_NUM` and
+`CFX_URL` together when a newer Enhanced Linux artifact is published.
 
 ### Web UI (txAdmin)
 
@@ -58,7 +92,7 @@ docker run -d \
   -v /volumes/fivem:/config \
   -v /volumes/txData:/txData \ # Can use a named volume as well -v txData:/txData \
   -ti \
-  spritsail/fivem
+  fivem-enhanced:90
 ```
 
 ### Environment Variables

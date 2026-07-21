@@ -1,15 +1,15 @@
-ARG FIVEM_NUM=33230
-ARG FIVEM_VER=33230-ba45c32ba5782c784feb939fdf921961b00d9c3f
-ARG DATA_VER=0e7ba538339f7c1c26d0e689aa750a336576cf02
+ARG CFX_NUM=90
+ARG CFX_URL=https://downloads.cfx-services.net/prod/019f8155-958f-7748-af5a-e80e9b48966c/cfx-server_linux_x64.tar.xz
+ARG DATA_VER=e265cb251c88260533c847d4a1a2838c7d828a66
 
 FROM spritsail/alpine:3.23 AS builder
 
-ARG FIVEM_VER
+ARG CFX_URL
 ARG DATA_VER
 
 WORKDIR /output
 
-RUN wget -O- https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/${FIVEM_VER}/fx.tar.xz \
+RUN wget -O- "${CFX_URL}" \
         | tar xJ --strip-components=1 \
             --exclude alpine/dev --exclude alpine/proc \
             --exclude alpine/run --exclude alpine/sys \
@@ -26,17 +26,18 @@ RUN chmod +x /output/usr/bin/entrypoint
 
 FROM scratch
 
-ARG FIVEM_VER
-ARG FIVEM_NUM
+ARG CFX_NUM
+ARG CFX_URL
 ARG DATA_VER
 
 LABEL org.opencontainers.image.authors="Spritsail <fivem@spritsail.io>" \
       org.opencontainers.image.vendor="Spritsail" \
-      org.opencontainers.image.title="FiveM" \
+      org.opencontainers.image.title="Cfx Server for FiveM GTAV Enhanced" \
       org.opencontainers.image.url="https://fivem.net" \
-      org.opencontainers.image.description="FiveM is a modification for Grand Theft Auto V enabling you to play multiplayer on customized dedicated servers." \
-      org.opencontainers.image.version=${FIVEM_NUM} \
-      io.spritsail.version.fivem=${FIVEM_VER} \
+      org.opencontainers.image.description="Cfx Server for hosting a FiveM for GTAV Enhanced server." \
+      org.opencontainers.image.version=${CFX_NUM} \
+      io.spritsail.version.cfx=${CFX_NUM} \
+      io.spritsail.source.cfx=${CFX_URL} \
       io.spritsail.version.fivem_data=${DATA_VER}
 
 COPY --from=builder /output/ /

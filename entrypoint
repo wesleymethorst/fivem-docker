@@ -29,7 +29,7 @@ if [ -z "${NO_LICENSE_KEY}${NO_LICENCE_KEY}" ]; then
         LICENSE_KEY="${LICENCE_KEY}"
     fi
 
-    if [ -z "${NO_DEFAULT_CONFIG}"] && [ -z "${LICENSE_KEY}" ]; then
+    if [ -z "${NO_DEFAULT_CONFIG}" ] && [ -z "${LICENSE_KEY}" ]; then
         >&2 printf "License key not found in environment, please create one at https://keymaster.fivem.net!\n"
         exit 1
     fi
@@ -43,9 +43,9 @@ if [ -z "${NO_LICENSE_KEY}${NO_LICENCE_KEY}" ]; then
 fi
 
 exec /opt/cfx-server/ld-musl-x86_64.so.1 \
-    --library-path "/usr/lib/v8/:/lib/:/usr/lib/" \
+    --library-path "/lib/:/usr/lib/" \
     -- \
-    /opt/cfx-server/FXServer \
+    /opt/cfx-server/cfx-server \
         +set citizen_dir /opt/cfx-server/citizen/ \
         $CONFIG_ARGS \
         $*

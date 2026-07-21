@@ -1,8 +1,7 @@
-version: '3'
-
 services:
   fivem:
-    image: spritsail/fivem
+    build: .
+    image: fivem-enhanced:90
     container_name: fivem
     restart: always
     stdin_open: true
