@@ -1,7 +1,6 @@
 services:
   fivem:
-    build: .
-    image: fivem-enhanced:90
+    image: ghcr.io/wesleymethorst/fivem-enhanced:enhanced
     container_name: fivem
     restart: always
     stdin_open: true
