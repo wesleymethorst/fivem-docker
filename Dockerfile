@@ -9,10 +9,10 @@ ARG DATA_VER
 
 WORKDIR /output
 
-RUN wget -O- "${CFX_URL}" \
-        | tar xJ --strip-components=1 \
-            --exclude alpine/dev --exclude alpine/proc \
-            --exclude alpine/run --exclude alpine/sys \
+RUN mkdir -p /tmp/cfx-artifact \
+ && wget -O- "${CFX_URL}" | tar xJ -C /tmp/cfx-artifact \
+ && cp -a /tmp/cfx-artifact/alpine/. /output/ \
+ && rm -rf /tmp/cfx-artifact \
  && mkdir -p /output/opt/cfx-server-data /output/usr/local/share \
  && wget -O- https://github.com/citizenfx/cfx-server-data/archive/${DATA_VER}.tar.gz \
         | tar xz --strip-components=1 -C opt/cfx-server-data
@@ -41,7 +41,8 @@ LABEL org.opencontainers.image.authors="Spritsail <fivem@spritsail.io>" \
       io.spritsail.version.fivem_data=${DATA_VER}
 
 COPY --from=builder /output/ /
-RUN apk add --no-cache tini
+RUN test -x /opt/cfx-server/cfx-server \
+ && apk add --no-cache tini
 
 WORKDIR /config
 EXPOSE 30120

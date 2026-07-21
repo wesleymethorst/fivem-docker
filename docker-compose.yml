@@ -1,6 +1,7 @@
 services:
   fivem:
-    image: ghcr.io/wesleymethorst/fivem-enhanced:enhanced
+    build: .
+    image: fivem-enhanced:90
     container_name: fivem
     restart: always
     stdin_open: true
@@ -16,3 +17,29 @@ services:
       # - "40120:40120"
     environment:
       LICENSE_KEY: "license-key-here"
+
+
+
+
+
+services:
+  fivem:
+    build: .
+    image: ghcr.io/wesleymethorst/fivem-enhanced:sha-c307c40
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+    environment:
+      NO_DEFAULT_CONFIG: "1"
+
+    volumes:
+      - /home/fivem/woenselcombat:/txData
+
+    ports:
+      - "30120:30120/tcp"
+      - "30120:30120/udp"
+      - "40120:40120"
+
+    labels:
+      - "traefik.enable=true"
